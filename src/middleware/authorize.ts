@@ -1,9 +1,8 @@
-import {  Response, NextFunction } from 'express';
-import { AuthRequest } from '../models/interfaces';
+import {  Request, Response, NextFunction } from 'express';
 
 
 export const authorize = (roles: string[]) => {
-    return (req: AuthRequest, res: Response, next: NextFunction) => {
+    return (req: Request, res: Response, next: NextFunction) => {
         const { role } = req.user; // Access the role from req.user
 
         if (!role) {

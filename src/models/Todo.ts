@@ -4,7 +4,10 @@ import { constants } from '../data';
 
 
 const TodoSchema: Schema = new Schema<ITodo>({
-
+    title: { 
+        type: String, 
+        required: false 
+    },
     description: { 
         type: String, 
         required: false 

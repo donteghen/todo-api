@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { User } from '../models/User';
 import { generateToken } from '../utils'; // Utility function to generate JWT
-import { AuthRequest } from '../models/interfaces';
 
 export const login = async (req: Request, res: Response) => {
     const { username, password } = req.body;
@@ -34,7 +33,7 @@ export const login = async (req: Request, res: Response) => {
 };
 
 
-export const logout = async (req: AuthRequest, res: Response) => {
+export const logout = async (req: Request, res: Response) => {
     const { id } = req.user; 
 
     try {

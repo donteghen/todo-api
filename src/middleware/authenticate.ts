@@ -1,12 +1,11 @@
-import {  Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
 
-import { AuthRequest } from '../models/interfaces';
 
 
 
-const authenticate = async (req: AuthRequest, res: Response, next: NextFunction) => {
+const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     
     if (!token) {

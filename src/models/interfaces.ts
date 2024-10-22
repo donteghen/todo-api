@@ -12,9 +12,6 @@ interface ISUCCESS {
     data: any | null
 }
 
-interface AuthRequest extends Request {
-    user?: any;
-}
 
 interface IUser extends Document {
     username: string;
@@ -25,6 +22,7 @@ interface IUser extends Document {
     comparePassword(password: string): Promise<boolean>;
 }
 interface ITodo extends Document {
+    title: string;
     description: string;
     status: string;
     assignedTo: Types.ObjectId;  
@@ -33,7 +31,8 @@ interface ITodo extends Document {
 }
 
 interface ITeam extends Document {
-    teamName: string;
+    name: string;
+    description: string;
     members: Types.ObjectId[];
     teamLead: Types.ObjectId;
 }
@@ -48,11 +47,15 @@ interface IEmailNotification {
     }
 }
 
+interface ILogData {
+    source: string,
+    message: string,
+    meta?: any | null
+}
 
 export {
     IEmailNotification,
-    IERROR, ISUCCESS,
-    AuthRequest,
+    IERROR, ISUCCESS, ILogData,
     IUser,
     ITodo,
     ITeam

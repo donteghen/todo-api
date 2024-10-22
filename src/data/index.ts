@@ -11,4 +11,15 @@ const constants = {
     }
 }
 
-export {constants};
+const errorOptions = {
+    healthCheckFailed: {
+        message: 'Health check failed! Please review the code base and release a fix.'
+    }
+}
+
+const successOptions = {
+    healthCheckFailed: {
+        message: 'Health check failed! Please review the code base and release a fix.'
+    }
+}
+export {constants, errorOptions, successOptions};

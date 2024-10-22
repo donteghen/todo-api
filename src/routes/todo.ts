@@ -6,28 +6,23 @@ import {
     assignTodo, 
     updateTodoStatus, 
     getTodoDetails, 
-    getAllTodos 
+    getAllTodos, 
+    getAllTeamTodos
 } from '../controllers/todo';
 import { authenticate } from '../middleware/authenticate';
 import { authorize } from '../middleware/authorize';
 import { constants } from '../data'; 
 
 const router = Router();
-const base_url = '/api/teams'
+const base_url = '/api/todos'
 /**
  * @swagger
- * /teams/{teamId}/todos:
+ * /todos:
  *   post:
  *     summary: Team lead creates a todo within the team
  *     tags: [Todos]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - name: teamId
- *         in: path
- *         required: true
- *         schema:
- *           type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -39,28 +34,25 @@ const base_url = '/api/teams'
  *                 type: string
  *               description:
  *                 type: string
+ *               teamId:
+ *                 type: string
  *     responses:
  *       201:
  *         description: Todo created successfully
  *       400:
  *         description: Bad request
  */
-router.post(`${base_url}/:teamId/todos`, authenticate, authorize([constants.USER_ROLE.TEAM_LEAD]), createTodo);
+router.post(`${base_url}`, authenticate, authorize([constants.USER_ROLE.TEAM_LEAD]), createTodo);
 
 /**
  * @swagger
- * /teams/{teamId}/todos/{todoId}:
+ * /todos/{todoId}:
  *   put:
  *     summary: Team lead updates todo details
  *     tags: [Todos]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - name: teamId
- *         in: path
- *         required: true
- *         schema:
- *           type: string
  *       - name: todoId
  *         in: path
  *         required: true
@@ -83,7 +75,7 @@ router.post(`${base_url}/:teamId/todos`, authenticate, authorize([constants.USER
  *       400:
  *         description: Bad request
  */
-router.put(`${base_url}/:teamId/todos/:todoId`, authenticate, authorize([constants.USER_ROLE.TEAM_LEAD]), updateTodo);
+router.put(`${base_url}/:todoId`, authenticate, authorize([constants.USER_ROLE.TEAM_LEAD]), updateTodo);
 
 /**
  * @swagger
@@ -94,11 +86,6 @@ router.put(`${base_url}/:teamId/todos/:todoId`, authenticate, authorize([constan
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - name: teamId
- *         in: path
- *         required: true
- *         schema:
- *           type: string
  *       - name: todoId
  *         in: path
  *         required: true
@@ -112,22 +99,17 @@ router.put(`${base_url}/:teamId/todos/:todoId`, authenticate, authorize([constan
  *       400:
  *         description: Bad request
  */
-router.delete(`${base_url}/:teamId/todos/:todoId`, authenticate, authorize([constants.USER_ROLE.TEAM_LEAD]), deleteTodo);
+router.delete(`${base_url}/:todoId`, authenticate, authorize([constants.USER_ROLE.TEAM_LEAD]), deleteTodo);
 
 /**
  * @swagger
- * /teams/{teamId}/todos/{todoId}/assign/{userId}:
+ * /todos/{todoId}/users/{userId}:
  *   put:
  *     summary: Team lead assigns todo to a user within the team
  *     tags: [Todos]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - name: teamId
- *         in: path
- *         required: true
- *         schema:
- *           type: string
  *       - name: todoId
  *         in: path
  *         required: true
@@ -146,22 +128,17 @@ router.delete(`${base_url}/:teamId/todos/:todoId`, authenticate, authorize([cons
  *       400:
  *         description: Bad request
  */
-router.put(`${base_url}/:teamId/todos/:todoId/assign/:userId`, authenticate, authorize([constants.USER_ROLE.TEAM_LEAD]), assignTodo);
+router.put(`${base_url}/:todoId/users/:userId`, authenticate, authorize([constants.USER_ROLE.TEAM_LEAD]), assignTodo);
 
 /**
  * @swagger
- * /teams/{teamId}/todos/{todoId}/status:
+ * /todos/{todoId}/status:
  *   put:
  *     summary: User updates the status of their assigned todo
  *     tags: [Todos]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - name: teamId
- *         in: path
- *         required: true
- *         schema:
- *           type: string
  *       - name: todoId
  *         in: path
  *         required: true
@@ -184,22 +161,17 @@ router.put(`${base_url}/:teamId/todos/:todoId/assign/:userId`, authenticate, aut
  *       400:
  *         description: Bad request
  */
-router.put(`${base_url}/:teamId/todos/:todoId/status`, authenticate, authorize([constants.USER_ROLE.TEAM_USER]), updateTodoStatus);
+router.put(`${base_url}/:todoId/status`, authenticate, authorize([constants.USER_ROLE.TEAM_USER]), updateTodoStatus);
 
 /**
  * @swagger
- * /teams/{teamId}/todos/{todoId}:
+ * /todos/{todoId}:
  *   get:
  *     summary: Fetch specific todo details
  *     tags: [Todos]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - name: teamId
- *         in: path
- *         required: true
- *         schema:
- *           type: string
  *       - name: todoId
  *         in: path
  *         required: true
@@ -213,7 +185,7 @@ router.put(`${base_url}/:teamId/todos/:todoId/status`, authenticate, authorize([
  *       400:
  *         description: Bad request
  */
-router.get(`${base_url}/:teamId/todos/:todoId`, authenticate, authorize([constants.USER_ROLE.TEAM_USER]), getTodoDetails);
+router.get(`${base_url}/:todoId`, authenticate, authorize([constants.USER_ROLE.TEAM_USER, constants.USER_ROLE.TEAM_LEAD, constants.USER_ROLE.ADMIN]), getTodoDetails);
 
 /**
  * @swagger
@@ -231,13 +203,31 @@ router.get(`${base_url}/:teamId/todos/:todoId`, authenticate, authorize([constan
  *           type: string
  *     responses:
  *       200:
- *         description: Todos fetched successfully
+ *          description: Todos fetched successfully                  
  *       404:
  *         description: Team not found
  *       400:
  *         description: Bad request
  */
-router.get(`${base_url}/:teamId/todos`, authenticate, authorize([constants.USER_ROLE.TEAM_USER]), getAllTodos);
+router.get(`${base_url}/teams/:teamId`, authenticate, authorize([constants.USER_ROLE.TEAM_LEAD, constants.USER_ROLE.ADMIN]), getAllTeamTodos);
+
+/**
+ * @swagger
+ * /teams/{teamId}/todos:
+ *   get:
+ *     summary: Fetch all todos for a specific team
+ *     tags: [Todos]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *          description: Todos fetched successfully                  
+ *       404:
+ *         description: Team not found
+ *       400:
+ *         description: Bad request
+ */
+router.get(`${base_url}`, authenticate, authorize([constants.USER_ROLE.ADMIN]), getAllTodos);
 
 export default {
     path: `${base_url}/*`,
