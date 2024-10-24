@@ -5,7 +5,7 @@ import logger from '../../services/log';
 config();
 
 const prodEnv = process.env.NODE_ENV === 'development';
-const mongo_srv = process.env.MONGO_STRING || 'mongodb+srv://todo:todo@cluster0.gqdkn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+const mongo_srv = process.env.MONGO_STRING;
 export const connectDb = async () => {
     connection.on('connected', () => {
         if (!prodEnv) {

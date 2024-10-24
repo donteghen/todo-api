@@ -174,6 +174,7 @@ router.get(`${base_url}/`, authenticate, authorize([constants.USER_ROLE.ADMIN]),
 router.put(`${base_url}/:teamId/users/:userId`, authenticate, authorize([constants.USER_ROLE.ADMIN]), assignTeamLead);
 
 export default {
+    filePath: '/team',
     path: `${base_url}/*`,
     router,
 };

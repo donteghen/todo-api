@@ -3,7 +3,7 @@ import { IUser } from "./models/interfaces";
 declare global {
     namespace NodeJS {
       interface ProcessEnv {
-        [key: string]: string | undefined;
+        [key: string]: string;
         PORT: string;
         NODE_ENV: string
         MONGO_STRING:string

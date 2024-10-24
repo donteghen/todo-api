@@ -12,6 +12,34 @@ import { constants } from '../data'; // Adjust the import path according to your
 
 const router = Router();
 const base_url = '/api/users'
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *     summary: Register a user account
+ *     tags: [Users]    
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User approved successfully
+ *       404:
+ *         description: User not found
+ *       400:
+ *         description: Bad request
+ */
+router.post(`${base_url}`,  signUp);
 
 /**
  * @swagger
@@ -103,6 +131,7 @@ router.get(`${base_url}/:userId`, authenticate, authorize([constants.USER_ROLE.A
 router.get(`${base_url}/`, authenticate, authorize([constants.USER_ROLE.ADMIN]), getAllUsers);
 
 export default {
+    filePath: '/user',
     path: `${base_url}/*`,
     router,
 };

@@ -3,18 +3,18 @@ import { User } from '../models/User';
 import { generateToken } from '../utils'; // Utility function to generate JWT
 
 export const login = async (req: Request, res: Response) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     try {
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ email, approved: true });
         if (!user) {
-            res.status(401).json({ ok: false, message: 'Invalid username or password' });
+            res.status(401).json({ ok: false, message: 'User not found!' });
             return
         }
 
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            res.status(401).json({ ok: false, message: 'Invalid username or password' });
+            res.status(401).json({ ok: false, message: 'Invalid password' });
             return
         }
 

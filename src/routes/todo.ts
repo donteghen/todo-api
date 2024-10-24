@@ -161,7 +161,7 @@ router.put(`${base_url}/:todoId/users/:userId`, authenticate, authorize([constan
  *       400:
  *         description: Bad request
  */
-router.put(`${base_url}/:todoId/status`, authenticate, authorize([constants.USER_ROLE.TEAM_USER]), updateTodoStatus);
+router.put(`${base_url}/:todoId/status`, authenticate, authorize([constants.USER_ROLE.TEAM_USER, constants.USER_ROLE.TEAM_LEAD]), updateTodoStatus);
 
 /**
  * @swagger
@@ -230,6 +230,7 @@ router.get(`${base_url}/teams/:teamId`, authenticate, authorize([constants.USER_
 router.get(`${base_url}`, authenticate, authorize([constants.USER_ROLE.ADMIN]), getAllTodos);
 
 export default {
+    filePath: '/todo',
     path: `${base_url}/*`,
     router,
 };

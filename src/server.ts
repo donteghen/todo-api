@@ -25,9 +25,9 @@ routes.forEach((route) => {
 
 // initialize routes
 console.log('Initializing Routes...');
-routes.forEach(route => {
-    logger.info({source:'server.js', message: `loading route : ${route.path}`, meta: null})
-    app.use(route.path, route.router);
+routes.forEach(({path, router}) => {
+    logger.info({source:'server.js', message: `loading route : ${path}`, meta: null})
+    app.use(router);
 })
 console.log('*** Route Initialization Completed ***');
 
@@ -47,6 +47,6 @@ app.get('/api/healthz', async (req: Request, res: Response) => {
 })
 
 // Swagger documentation route
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 export {app};

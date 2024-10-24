@@ -15,10 +15,12 @@ interface ISUCCESS {
 
 interface IUser extends Document {
     username: string;
+    email:string,
     password: string;
     role: string;
     token: string | null,
     team: Types.ObjectId;
+    approved: boolean;
     comparePassword(password: string): Promise<boolean>;
 }
 interface ITodo extends Document {

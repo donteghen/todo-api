@@ -6,7 +6,9 @@ import bcrypt from 'bcrypt'
 const UserSchema = new Schema<IUser>({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     token: {type: String},
+    approved: {type: Boolean},
     role: { type: String, 
         enum: [constants.USER_ROLE.ADMIN, constants.USER_ROLE.TEAM_LEAD, constants.USER_ROLE.TEAM_USER], 
         default:  constants.USER_ROLE.TEAM_USER

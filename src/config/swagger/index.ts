@@ -1,5 +1,7 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import { routes } from '../../routes';
+import path from 'path';
+
 
 const swaggerDefinition = {
   openapi: '3.0.0',
@@ -9,18 +11,19 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:3001',
+      url: 'http://localhost:8080',
       description: 'Development server',
     },
   ],
 };
 
-
+const routeSrc = path.join(process.cwd(), 'src', 'routes')
 const options = {
   swaggerDefinition,
-  apis: routes.map((route) => `./routes/${route.path}.js`), 
+  apis: routes.map((route) => `${routeSrc}${route.filePath}.ts`), 
 };
+console.log('options', options, )
 
 const swaggerSpec = swaggerJSDoc(options);
-
+console.log('swaggerSpec', JSON.stringify(swaggerSpec, null, 2));
 export default swaggerSpec;

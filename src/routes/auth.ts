@@ -4,7 +4,7 @@ import { login, logout } from '../controllers/auth';
 import { authenticate } from '../middleware/authenticate';
 
 const router = Router();
-const base_url = 'api/auth'
+const base_url = '/api/auth'
 /**
  * @swagger
  * /auth/login:
@@ -18,10 +18,10 @@ const base_url = 'api/auth'
  *           schema:
  *             type: object
  *             required:
- *               - username
+ *               - email
  *               - password
  *             properties:
- *               username:
+ *               email:
  *                 type: string
  *               password:
  *                 type: string
@@ -100,6 +100,7 @@ router.post(`${base_url}/login`, login);
 router.post(`${base_url}/logout`, authenticate, logout);
 
 export default {
+    filePath: '/auth',
     path: `${base_url}/*`,
     router,
 };

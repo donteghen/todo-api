@@ -2,15 +2,27 @@ import { Request, Response } from 'express';
 import { User } from '../models/User';
 import { generateToken } from '../utils'; // Adjust the import path as necessary
 import { constants } from '../data'; // Adjust the import path according to your project structure
-//import { notify } from '../services/email';
+import notify  from '../services/email';
+import { IEmailNotification } from "../models/interfaces";
+
 
 export const signUp = async (req: Request, res: Response) => {
     try {
-        const { username, password } = req.body;
-        const newUser = new User({ username, password });
+        const { username, password, email } = req.body;
+        const newUser = new User({ username, password, email });
         await newUser.save();
         
-        //notify(data);
+        const emailData: IEmailNotification = {
+            source: process.env.MAIL_SENDER, 
+            targets: [email, process.env.ADMIN_EMAIL], 
+            data: {
+                title: 'Welcome to Your Todo World',
+                subtitle: 'Sign up successful✅',
+                content: `Hi ${username}, \n\nYour account has been created successful and is currently pending approval. 
+                \nHang in tight! You will be notified immediately an admin approves your accout`
+            }
+        }
+        await notify(emailData);
         
         res.status(201).json({ ok: true, data: newUser });
     } catch (error) {

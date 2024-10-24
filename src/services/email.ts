@@ -5,7 +5,7 @@ import { IEmailNotification } from "../models/interfaces";
 const mailgun = new Mailgun(formData);
 const mgClient = mailgun.client({
     username: 'api', 
-    key: process.env.MAILGUN_API_KEY!,  // Mailgun API key from env variable
+    key: process.env.MAILGUN_API_KEY,  // Mailgun API key from env variable
 });
 
 

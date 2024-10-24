@@ -5,10 +5,11 @@ import { User } from '../models/User';
 
 import { toMongoId, mongoIdToString } from '../utils';
 import { constants } from '../data';
+import { Types } from 'mongoose';
 
 export const createTodo = async (req: Request, res: Response) => {
     try {
-        const { title, description, teamId } = req.body;
+        const { title, description, teamId, assignedTo } = req.body;
         const team = await Team.findById(teamId);
 
         if (!team) {
@@ -19,7 +20,9 @@ export const createTodo = async (req: Request, res: Response) => {
         const newTodo = new Todo({
             title,
             description,
-            team: team._id
+            team: team._id,
+            createdBy: new Types.ObjectId(req.user.id as string),
+            assignedTo: new Types.ObjectId(assignedTo as string)
         });
 
         await newTodo.save();
@@ -47,7 +50,7 @@ export const updateTodo = async (req: Request, res: Response) => {
             res.status(404).json({ ok: false, message: 'Team linked to this todo was not found!' });
             return
         }
-        if (team.teamLead?.toString() === req?.user?.id) {
+        if (team.teamLead?.toString() !== req?.user?.id) {
             res.status(404).json({ ok: false, message: 'You are not allowed t update todos from other teams.!' });
             return
         }
@@ -108,6 +111,7 @@ export const assignTodo = async (req: Request, res: Response) => {
 
 export const updateTodoStatus = async (req: Request, res: Response) => {
     try {
+        console.log('here')
         const { todoId } = req.params;
         const { status } = req.body;
         const todo = await Todo.findById(todoId);
@@ -121,9 +125,9 @@ export const updateTodoStatus = async (req: Request, res: Response) => {
             return
         }
         todo.status = status;
-        await todo.save();
+        const updateTodo = await todo.save();
 
-        res.status(200).json({ ok: true, data: todo });
+        res.status(200).json({ ok: true, data: updateTodo });
     } catch (error) {
         res.status(400).json({ ok: false, message: JSON.stringify(error) });
     }
@@ -138,16 +142,20 @@ export const getTodoDetails = async (req: Request, res: Response) => {
             res.status(404).json({ ok: false, message: 'Todo not found' });
             return
         }
+       
         if (req.user?.role === constants.USER_ROLE.TEAM_USER && todo.assignedTo.toString() !== req.user?.id) {
             res.status(404).json({ ok: false, message: 'You are not allowed to view this todo as it isn\'t assigned to you!' });
             return
         }
+
         if (req.user?.role === constants.USER_ROLE.TEAM_LEAD) {
             const team = await Team.findById(todo.team.toString());
-            if (team?.teamLead.toString() !== req.user?.id)
-            res.status(404).json({ ok: false, message: 'You are not allowed to view this todo as it doesn\'t belong to your team!' });
-            return
+            if (team?.teamLead.toString() !== req.user?.id) {
+                res.status(404).json({ ok: false, message: 'You are not allowed to view this todo as it doesn\'t belong to your team!' });
+                return
+            }            
         }
+        
         res.status(200).json({ ok: true, data: todo });
     } catch (error) {
         res.status(400).json({ ok: false, message: JSON.stringify(error) });
