@@ -1,6 +1,7 @@
 import formData from 'form-data';
 import Mailgun, {MessagesSendResult} from 'mailgun.js';
 import { IEmailNotification } from "../models/interfaces";
+import { localLog } from './log';
 
 const mailgun = new Mailgun(formData);
 const mgClient = mailgun.client({
@@ -26,10 +27,10 @@ async function notify(emailData: IEmailNotification): Promise<MessagesSendResult
   
     try {
       const response = await mgClient.messages.create(process.env.MAILGUN_DOMAIN!, messageData);
-      console.log('Email sent:', response);
+      localLog.log('Email sent:', response);
       return response;
     } catch (error) {
-      console.error('Error sending email:', error);
+      localLog.log('Error sending email:', error);
       return {status: 0}
     }
   }

@@ -111,7 +111,6 @@ export const assignTodo = async (req: Request, res: Response) => {
 
 export const updateTodoStatus = async (req: Request, res: Response) => {
     try {
-        console.log('here')
         const { todoId } = req.params;
         const { status } = req.body;
         const todo = await Todo.findById(todoId);

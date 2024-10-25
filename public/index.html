@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PM2 Process Manager</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <h2>Admin Login</h2>
+      <input type="text" id="email" class="input" placeholder="Email">
+      <input type="password" id="password" class="input" placeholder="Password">
+      <button id="loginBtn" class="btn">Login</button>
+      <div id="loginError" class="error-message"></div>
+    </div>
+  </div>
+
+  <div id="mainUI" class="container" style="display:none;">
+    <h1>PM2 Process Management</h1>
+    <div class="actions">
+      <button id="pullChangesBtn" class="btn">Pull Changes</button>
+      <button id="restartServerBtn" class="btn">Restart Server</button>
+      <button id="stopServerBtn" class="btn">Stop Server</button>
+      <button id="viewLogsBtn" class="btn">View Logs</button>
+    </div>
+    <div class="logs-section">
+      <h2>Server Logs</h2>
+      <pre id="logsOutput" class="logs-output">No logs to display yet.</pre>
+    </div>
+
+    <div class="revert-section">
+      <h2>Revert to Previous Commit</h2>
+      <input type="text" id="commitHash" class="input" placeholder="Enter commit hash...">
+      <button id="revertCommitBtn" class="btn">Revert</button> 
+    </div>
+
+    <div id="responseMessage" class="response-message"></div>
+  </div>
+
+  <script defer src="index.js"></script>
+</body>
+</html>

@@ -1,4 +1,6 @@
-
+import fs from 'fs';
+import path from 'path';
+import util from 'util';
 import logConfig from '../config/logging';
 import { ILogData } from '../models/interfaces';
 
@@ -28,4 +30,21 @@ const logger = {
     }
 }
 
-export default logger ;
+const localLog = {
+    log: (...args: any[]) => {
+
+        // Path to the log file
+        const logFilePath = path.join(process.cwd(), 'dist','public', 'logs', 'pm2.log'); 
+        const formattedMessage = util.format(...args);
+        
+        fs.appendFile(logFilePath, `${new Date().toISOString()} - ${formattedMessage}\n`, 'utf8', err => {
+            if (err) {
+                console.error('localLog -> failed to save to log file', err);
+            }
+        });
+        
+        // Also print to the console as normal, so you don't lose output in the terminal
+        process.stdout.write(formattedMessage + '\n'); 
+    }
+}
+export {logger, localLog} ;

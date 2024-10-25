@@ -1,6 +1,6 @@
 
 import { Router } from 'express';
-import { login, logout } from '../controllers/auth';
+import { authCheck, login, logout } from '../controllers/auth';
 import { authenticate } from '../middleware/authenticate';
 
 const router = Router();
@@ -98,6 +98,40 @@ router.post(`${base_url}/login`, login);
  *                   type: string
  */
 router.post(`${base_url}/logout`, authenticate, logout);
+
+/**
+ * @swagger
+ * /auth/checkAuth:
+ *   post:
+ *     summary: Authenticates a user session.
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Authentication sucessful.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       401:
+ *         description: Authentication failed.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
+router.get(`${base_url}/auth-check`, authenticate, authCheck);
 
 export default {
     filePath: '/auth',

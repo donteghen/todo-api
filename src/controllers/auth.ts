@@ -53,3 +53,12 @@ export const logout = async (req: Request, res: Response) => {
         res.status(500).json({ ok: false, message: 'Internal Server Error' });        
     }
 };
+
+export const authCheck = async (req: Request, res: Response) => {
+    try {         
+        res.status(200).json({ ok: true, message: 'Session is valid!' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ ok: false, message: 'Internal Server Error' });        
+    }
+};

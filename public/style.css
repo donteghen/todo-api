@@ -1,0 +1,72 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
+  
+  .container {
+    max-width: 90%;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .btn {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .logs-section, .revert-section {
+    margin-top: 20px;
+  }
+  
+  .logs-output {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    min-width: 400px;
+    max-height: 600px;
+    overflow: scroll;
+  }
+  
+  .input {
+    padding: 10px;
+    width: 80%;
+    margin-right: 10px;
+    font-size: 16px;
+  }
+  
+  .response-message {
+    margin-top: 20px;
+    font-weight: bold;
+    color: green;
+  }
+  

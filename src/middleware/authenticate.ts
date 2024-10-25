@@ -2,8 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
 import { Types } from 'mongoose';
-
-
+import { localLog, logger } from '../services/log';
 
 
 const authenticate = async (req: Request, res: Response, next: NextFunction) => {
@@ -28,7 +27,10 @@ const authenticate = async (req: Request, res: Response, next: NextFunction) => 
         req.user = { id: user.id, role: user.role, team: user.team }; // Include team if necessary
         next();
     } catch (error) {
-        console.error(error);
+        if (process.env.NODE_ENV === 'production') {
+            logger.error({source:'authenticate.ts', message: 'authentication error!', meta: error})
+        }
+        localLog.log(JSON.stringify({source:'authenticate.ts', message: 'authentication error!', meta: error}));
         res.status(401).json({ ok: false, message: 'Invalid token' });
     }
 };

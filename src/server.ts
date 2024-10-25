@@ -5,17 +5,20 @@ import swaggerSpec from './config/swagger';
 import { routes } from './routes';
 import cors from 'cors';
 import {config} from 'dotenv' ;
-import logger from './services/log';
+import {localLog, logger} from './services/log';
 import {errorOptions} from './data/index'
+import path from 'path';
 
 config();
 
 const app = express();
 const port = process.env.PORT ||8000;
+const prodEnv = process.env.NODE_ENV = 'developmet';
 
 // Middleware setup
 app.use(express.json());
 app.use(cors());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Load routes from routes/index.js
 routes.forEach((route) => {
@@ -24,13 +27,20 @@ routes.forEach((route) => {
 
 
 // initialize routes
-console.log('Initializing Routes...');
+localLog.log('Initializing Routes...');
 routes.forEach(({path, router}) => {
-    logger.info({source:'server.js', message: `loading route : ${path}`, meta: null})
+    if (prodEnv) {
+      logger.info({source:'server.js', message: `loading route : ${path}`, meta: null})
+    }
+    localLog.log(JSON.stringify({source:'server.js', message: `loading route : ${path}`, meta: null}))
     app.use(router);
 })
-console.log('*** Route Initialization Completed ***');
+localLog.log('*** Route Initialization Completed ***');
 
+// Serve the PM2 UI HTML
+app.get('/processes', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/index.html'));
+});
 
 //  Health check route
 app.get('/api/healthz', async (req: Request, res: Response) => {

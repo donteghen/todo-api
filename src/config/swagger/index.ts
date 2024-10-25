@@ -22,8 +22,7 @@ const options = {
   swaggerDefinition,
   apis: routes.map((route) => `${routeSrc}${route.filePath}.ts`), 
 };
-console.log('options', options, )
 
 const swaggerSpec = swaggerJSDoc(options);
-console.log('swaggerSpec', JSON.stringify(swaggerSpec, null, 2));
+
 export default swaggerSpec;
