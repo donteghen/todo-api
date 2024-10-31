@@ -15,8 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetch('/api/auth/auth-check', {
           method: 'GET',
           headers: { ...tokenHeader(), 'Content-Type': 'application/json' }
-        });
-        console.log('response', response)
+        });        
         if (response.ok) {
           loginModal.style.display = 'none';
           mainUI.style.display = 'block';
@@ -116,6 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         headers: {...tokenHeader(),  'Content-Type': 'application/json' },
       });
       const result = await response.json();
+      console.log('result', result)
       showMessage(result.message, result.ok);
     } catch (err) {
       showMessage('Failed to stop server', false);

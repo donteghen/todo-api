@@ -44,9 +44,9 @@ app.get('/processes', (req, res) => {
 
 //  Health check route
 app.get('/api/healthz', async (req: Request, res: Response) => {
+    localLog.log(`${[Date()]}: /api/healthz ==>  waiting....`)
     try {
         const entityCount = (await connection?.db?.collections())?.length;
-
       res.json({ok: true, message: `server -> heath-check router endpoint. Api is up and running & DB has ${entityCount} entities`});
     } catch (error) {
       if (process.env.NODE_ENV === 'production') {

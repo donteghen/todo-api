@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "tsc": "tsc",
-    "monitor": "pm2 monit",
-    "dev:start": "npm-run-all build start monitor",
-    "dev": "nodemon --watch src -e ts,js --watch public -e html,css,js --exec npm run dev:start",
-    "start": "pm2 restart dist/index.js --name TODO",
+    "tsc": "tsc",    
+    "dev:start": "npm-run-all build dev_start",
+    "dev": "nodemon --watch src --watch public -e html,css,js,ts --exec npm run dev:start",
+    "dev_start": "node dist/index.js --name TODO",
     "build": "tsc && npm run copy-public",
     "copy-public": "cp -r public dist",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles",
+    "monitor": "pm2 monit",
+    "prod_start": "pm2 start dist/index.js --name TODO",
+    "prod:start:monit": "npm-run-all -s prod_start monitor"
   },
   "keywords": [],
   "author": "",

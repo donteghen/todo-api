@@ -5,7 +5,7 @@ import { pullChanges, restartServer, stopServer, viewLogs, revertCommit } from '
 import { constants } from '../data';
 
 const router = Router();
-const base_url = '/api/pm2';
+const base_url = '/api/pm2'; 
 
 /**
  * @swagger
